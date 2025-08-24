@@ -1,34 +1,52 @@
-// posicao do circulo
-let x = 200;
-let y = 200;
+class Circulo {
+    constructor(x, y, radius) {
+        this.x = x;              // usa valores recebidos
+        this.y = y;
+        this.radius = radius;
+        this.diameter = radius * 2;
+        this.speedX = Math.random() * 10 - 5;
+        this.speedY = Math.random() * 10 - 5;
+    }
 
-// raio do circulo (extraído)
-const radius = 25;
-const diameter = radius * 2;
+    reset() {
+        this.x = width / 2;
+        this.y = height / 2;
+        this.speedX = Math.random() * 10 - 5;
+        this.speedY = Math.random() * 10 - 5;
+    }
 
-// velocidade do circulo
-let speedX = Math.random() * 10 - 5; // velocidade aleatória entre -5 e 5
-let speedY = Math.random() * 10 - 5; // velocidade aleatória entre -5 e 5
+    update() {
+        // mover
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        // se tocar na borda horizontal, reseta no meio da tela
+        if (this.x < this.radius || this.x > width - this.radius) {
+            this.reset();
+        }
+
+        // se tocar na borda vertical, inverte a direção
+        if (this.y < this.radius || this.y > height - this.radius) {
+            this.speedY *= -1;
+        }
+    }
+
+    desenha() {
+        fill(color(255, 0, 0));
+        ellipse(this.x, this.y, this.diameter, this.diameter);
+    }
+}
+
+let circulo = new Circulo(800, 400, 25);
 
 //codigo base do p5js
 function setup() {
     createCanvas(800, 400);
+    circulo = new Circulo(width / 2, height / 2, 25); // agora width/height existem
 }
 
 function draw() {
-    background(0);
-    fill(255);
-    ellipse(x, y, diameter, diameter);
-    x += speedX;
-    y += speedY;
-
-    // se tocar na borda horizontal, inverte a direção
-    if (x < radius || x > width - radius) {
-        speedX *= -1;
-    }
-
-    // se tocar na borda vertical, inverte a direção
-    if (y < radius || y > height - radius) {
-        speedY *= -1;
-    }
+    background(color(0, 0, 0));
+    circulo.update();
+    circulo.desenha();
 }
